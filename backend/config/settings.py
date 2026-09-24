@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'alerts',
     'requests_help',
     'relief',
+    'funds',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

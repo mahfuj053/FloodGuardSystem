@@ -7,4 +7,6 @@ urlpatterns = [
     path('api/', include('alerts.urls')),
     path('api/', include('requests_help.urls')),
     path('api/', include('relief.urls')),
+    path('api/', include('funds.urls')),
+    path('api/', include('dashboard.urls')),
 ]
