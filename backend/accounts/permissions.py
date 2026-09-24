@@ -15,3 +15,9 @@ class IsResponder(BasePermission):
 class IsGeneralUser(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.role == 'general_user'
+
+
+class IsAdminOrResponder(BasePermission):
+    """Admin, rescue team ba NGO"""
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role in ('admin', 'rescue_team', 'ngo')

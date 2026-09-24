@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'accounts',
     'alerts',
     'requests_help',
+    'relief',
 ]
 
 MIDDLEWARE = [
