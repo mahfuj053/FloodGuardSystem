@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'relief',
     'funds',
     'dashboard',
+        'community',
 ]
 
 MIDDLEWARE = [

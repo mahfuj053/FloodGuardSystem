@@ -9,4 +9,5 @@ urlpatterns = [
     path('api/', include('relief.urls')),
     path('api/', include('funds.urls')),
     path('api/', include('dashboard.urls')),
+        path('api/', include('community.urls')),
 ]
