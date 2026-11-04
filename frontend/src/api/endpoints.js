@@ -3,21 +3,21 @@ import { api } from './client'
 // --- Auth (config/urls.py: path('api/auth/', include('accounts.urls'))) ---
 // Backend USERNAME_FIELD is 'email', so login takes email + password
 export const login = (email, password) =>
-  api.post('/auth/login/', { email, password })
+  api.post('/api/auth/login/', { email, password })
 
-export const register = (payload) => api.post('/auth/register/', payload)
+export const register = (payload) => api.post('/api/auth/register/', payload)
 
-export const fetchProfile = () => api.get('/auth/me/')
-export const updateProfile = (payload) => api.patch('/auth/me/', payload)
+export const fetchProfile = () => api.get('/api/auth/me/')
+export const updateProfile = (payload) => api.patch('/api/auth/me/', payload)
 
 // Rescue team's own availability toggle
-export const fetchAvailability = () => api.get('/auth/availability/')
+export const fetchAvailability = () => api.get('/api/auth/availability/')
 export const setAvailability = (isAvailable) =>
-  api.patch('/auth/availability/', { is_available: isAvailable })
+  api.patch('/api/auth/availability/', { is_available: isAvailable })
 
 // Admin: list rescue_team users with availability
-export const fetchVolunteers = () => api.get('/auth/volunteers/')
-export const fetchGeneralUsers = () => api.get('/auth/general-users/')
+export const fetchVolunteers = () => api.get('/api/auth/volunteers/')
+export const fetchGeneralUsers = () => api.get('/api/auth/general-users/')
 
 // --- Help requests (config/urls.py: path('api/', include('requests_help.urls'))) ---
 // GET is auto-filtered by backend: general_user sees only their own, responders/admin see all
