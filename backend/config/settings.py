@@ -29,9 +29,9 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = 'django-insecure-fa0*kgy-m&eyr%*+f-qtsb&5z#2iikkg9jr0tnc&6ygyx7@6w7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -144,8 +144,11 @@ MAILERS = {
 
 AUTH_USER_MODEL = 'accounts.User'
 
-# CORS - allow the Vite dev server to call this API
-CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
+# CORS configuration for production & development
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'https://flood-guard-system.vercel.app',
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
