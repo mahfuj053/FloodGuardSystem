@@ -1,9 +1,8 @@
 import axios from 'axios'
 
-// Django REST backend base URL. 
-// Production-এ Render-এর URL ব্যবহার করবে, আর Local-এ empty string থাকবে যা vite.config.js এর মাধ্যমে proxy হবে।
+// Direct production backend URL to bypass environment variable issues
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '',
+  baseURL: 'https://floodguard-backend-rjb4.onrender.com',
   headers: { 'Content-Type': 'application/json' },
 })
 
