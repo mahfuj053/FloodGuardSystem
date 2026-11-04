@@ -1,8 +1,9 @@
 import axios from 'axios'
 
-// Django REST backend base URL. In dev, /api is proxied to 127.0.0.1:8000 (see vite.config.js)
+// Django REST backend base URL. 
+// Production-এ Render-এর URL ব্যবহার করবে, আর Local-এ empty string থাকবে যা vite.config.js এর মাধ্যমে proxy হবে।
 export const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '',
   headers: { 'Content-Type': 'application/json' },
 })
 
@@ -43,7 +44,8 @@ api.interceptors.response.use(
       original._retry = true
       isRefreshing = true
       try {
-        const { data } = await axios.post('/api/auth/token/refresh/', { refresh })
+        // Use `api` instance so it correctly respects baseURL (Render / Local proxy)
+        const { data } = await api.post('/api/auth/token/refresh/', { refresh })
         localStorage.setItem('fg_access', data.access)
         processQueue(null, data.access)
         original.headers.Authorization = `Bearer ${data.access}`
