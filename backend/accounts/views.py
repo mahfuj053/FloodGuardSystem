@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import Profile, User
-from .permissions import IsAdmin
+from .permissions import IsAdmin, IsAdminOrResponder
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 
 
@@ -65,5 +65,20 @@ class VolunteerListView(APIView):
                 'phone': p.phone if p else '',
                 'location': p.location if p else '',
                 'is_available': p.is_available if p else False,
+            })
+        return Response(data)
+
+
+class GeneralUserListView(APIView):
+    """Fund distribution-e beneficiary select korar jonno general_user list"""
+    permission_classes = [IsAdminOrResponder]
+
+    def get(self, request):
+        data = []
+        for u in User.objects.filter(role='general_user'):
+            data.append({
+                'id': u.id,
+                'name': u.get_full_name() or u.email,
+                'email': u.email,
             })
         return Response(data)

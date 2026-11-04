@@ -17,7 +17,10 @@ class Donation(models.Model):
     currency = models.CharField(max_length=5, default='BDT')
     donation_type = models.CharField(max_length=10, choices=Type.choices, default=Type.FUND)
     details = models.CharField(max_length=255, blank=True)
-    status = models.CharField(max_length=10, choices=Status.choices, default=Status.COMPLETED)
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
+    # SSLCommerz tracking fields
+    transaction_id = models.CharField(max_length=64, unique=True, blank=True, null=True)
+    gateway_val_id = models.CharField(max_length=128, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

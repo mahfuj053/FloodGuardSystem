@@ -10,10 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
+from datetime import timedelta
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load variables from backend/.env (store_id, store_password, etc.)
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -45,7 +51,7 @@ INSTALLED_APPS = [
     'relief',
     'funds',
     'dashboard',
-        'community',
+    'community',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -134,9 +141,11 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
 AUTH_USER_MODEL = 'accounts.User'
+
+# CORS - allow the Vite dev server to call this API
 CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
-from datetime import timedelta
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -148,3 +157,13 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
+
+# --- SSLCommerz payment gateway (sandbox) ---
+SSLCOMMERZ_STORE_ID = os.environ.get('SSLCOMMERZ_STORE_ID')
+SSLCOMMERZ_STORE_PASSWORD = os.environ.get('SSLCOMMERZ_STORE_PASSWORD')
+SSLCOMMERZ_IS_SANDBOX = os.environ.get('SSLCOMMERZ_IS_SANDBOX', 'True') == 'True'
+SSLCOMMERZ_SESSION_API = 'https://sandbox.sslcommerz.com/gwprocess/v4/api.php'
+SSLCOMMERZ_VALIDATION_API = 'https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php'
+
+# Frontend URL — used to build success/fail/cancel redirect pages
+FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:5173')
