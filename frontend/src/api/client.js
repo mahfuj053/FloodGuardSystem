@@ -1,8 +1,13 @@
 import axios from 'axios'
 
-// Direct production backend URL to bypass environment variable issues
+// Local dev (npm run dev): relative URL -> Vite proxy -> http://127.0.0.1:8000
+// Production build (Vercel): deployed backend on Render
+const API_BASE = import.meta.env.DEV
+  ? ''
+  : 'https://floodguard-backend-rjb4.onrender.com'
+
 export const api = axios.create({
-  baseURL: 'https://floodguard-backend-rjb4.onrender.com',
+  baseURL: API_BASE,
   headers: { 'Content-Type': 'application/json' },
 })
 
@@ -43,7 +48,6 @@ api.interceptors.response.use(
       original._retry = true
       isRefreshing = true
       try {
-        // Use `api` instance so it correctly respects baseURL (Render / Local proxy)
         const { data } = await api.post('/api/auth/token/refresh/', { refresh })
         localStorage.setItem('fg_access', data.access)
         processQueue(null, data.access)
