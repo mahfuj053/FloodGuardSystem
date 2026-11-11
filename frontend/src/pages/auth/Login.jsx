@@ -2,12 +2,19 @@ import React, { useState } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useAuth, ROLES, RESPONDER_ROLES } from '../../auth/AuthContext'
 
+const ROLE_LABELS = {
+  general_user: 'Affected Citizen',
+  rescue_team: 'Rescue Team',
+  ngo: 'NGO',
+  admin: 'Admin',
+}
+
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const { login } = useAuth()
+  const { login, logout } = useAuth()
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const preselectedRole = params.get('role')
@@ -18,6 +25,20 @@ export default function Login() {
     setLoading(true)
     try {
       const user = await login(email, password)
+
+      // Selected role card must match the account's real role
+      if (preselectedRole && user.role !== preselectedRole) {
+        localStorage.removeItem('fg_access')
+        localStorage.removeItem('fg_refresh')
+        if (typeof logout === 'function') logout()
+        setError(
+          `This account is registered as ${ROLE_LABELS[user.role] || user.role}, ` +
+            `not ${ROLE_LABELS[preselectedRole] || preselectedRole}. ` +
+            `Go back and choose the correct role.`
+        )
+        return
+      }
+
       redirectByRole(user.role, navigate)
     } catch (err) {
       setError(
@@ -34,7 +55,8 @@ export default function Login() {
         <h2 style={{ marginTop: 0 }}>Sign in</h2>
         {preselectedRole && (
           <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: -8 }}>
-            Continuing as <strong>{preselectedRole}</strong>
+            Continuing as <strong>{ROLE_LABELS[preselectedRole] || preselectedRole}</strong>{' '}
+            · <Link to="/select-role" style={{ color: 'var(--accent)' }}>change role</Link>
           </p>
         )}
         <form onSubmit={handleSubmit}>
